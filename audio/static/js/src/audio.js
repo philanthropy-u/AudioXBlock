@@ -172,7 +172,3 @@ function AudioXBlock(runtime, element) {
     document.getElementById("transcript-embed").height = "100%";
 
 }
-
-
-
-
