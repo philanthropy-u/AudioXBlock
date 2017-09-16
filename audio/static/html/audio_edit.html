@@ -3,7 +3,13 @@
     <li class="field comp-setting-entry is-set">
       <div class="wrapper-comp-setting">
         <label class="label setting-label" for="audio_src">Audio Source Location</label>
-        <input class="input setting-input" name="audio_src" id="audio_src" value="{src}" type="text" />
+        <input placeholder="http://audio.com/my-audio.mp3" class="input setting-input" name="audio_src" id="audio_src" value="{src}" type="text" required/>
+      </div>
+    </li>
+    <li class="field comp-setting-entry is-set">
+      <div class="wrapper-comp-setting">
+        <label class="label setting-label" for="transcript_src">Transcript Source Location</label>
+        <input placeholder="http://transcripts.com/my-transcript.srt" class="input setting-input" name="transcript_src" id="transcript_src" value="{transcript_src}" type="text" required/>
       </div>
     </li>
   </ul>

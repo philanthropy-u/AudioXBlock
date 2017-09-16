@@ -14,10 +14,9 @@ class AudioXBlock(XBlock):
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
-    src = String(
-           scope = Scope.settings, 
-           help = "URL for MP3 file to play"
-        )
+    src = String(scope=Scope.settings, help="URL for MP3 file to play")
+    transcript_src = String(scope=Scope.settings, help="plain text", default="")
+
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -31,8 +30,12 @@ class AudioXBlock(XBlock):
         when viewing courses.
         """
         html = self.resource_string("static/html/audio.html")
-        frag = Fragment(html.format(src = self.src))
+        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src))
         frag.add_css(self.resource_string("static/css/audio.css"))
+
+        js = self.resource_string("static/js/src/audio.js")
+        frag.add_javascript(js)
+        frag.initialize_js('AudioXBlock')
         return frag
 
     def studio_view(self, context):
@@ -40,7 +43,7 @@ class AudioXBlock(XBlock):
         The view for editing the AudioXBlock parameters inside Studio.
         """
         html = self.resource_string("static/html/audio_edit.html")
-        frag = Fragment(html.format(src=self.src))
+        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src))
 
         js = self.resource_string("static/js/src/audio_edit.js")
         frag.add_javascript(js)
@@ -54,6 +57,7 @@ class AudioXBlock(XBlock):
         Called when submitting the form in Studio.
         """
         self.src = data.get('src')
+        self.transcript_src = data.get('transcript_src')
 
         return {'result': 'success'}
 
@@ -65,9 +69,11 @@ class AudioXBlock(XBlock):
         return [
             ("AudioXBlock",
              """<vertical_demo>
-                  <audio src="http://localhost/Ikea.mp3"> </audio>
-                  <audio src="http://localhost/skull.mp3"> </audio>
-                  <audio src="http://localhost/monkey.mp3"> </audio>
+                    <audio src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" transcript_src="http://cpansearch.perl.org/src/MIYAGAWA/Video-Subtitle-SRT-0.01/t/sample.srt"> </audio>
                 </vertical_demo>
              """),
         ]
+
+# < audio
+# src = "http://www.archive.org/download/MITCMS_608F10/MITCMS_608F10lec02.mp3"
+# transcript_src = "https://ocw.mit.edu/courses/comparative-media-studies-writing/cms-608-game-design-fall-2010/audio-lectures/lecture-2-iterative-design/68554.srt" > < / audio >

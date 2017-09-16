@@ -1,7 +1,13 @@
-<div class="audio_block">
-<audio controls preload>
-  <source src="{src}">
-  <embed height="50" width="100" src="{src}">
-</audio>
-
+<div class="row audio_block">
+  <div class="col-5">
+    <audio controls preload class="col-12">
+      <source src="{src}" >
+      <embed  src="{src}" >
+    </audio>
+    <a href="{src}">Download Audio</a>
+  </div>
+  <div class="col-7">
+    <embed type="text/plain" src="{transcript_src}" class="col-12"></embed>
+    <a href="{transcript_src}">Download Transcript</a>
+  </div>
 </div>
