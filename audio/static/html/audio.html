@@ -1,10 +1,19 @@
 <div class="row audio_block">
   <div class="col-5">
-    <audio controls preload class="col-12">
-      <source src="{src}" >
-      <embed  src="{src}" >
+    <audio id="audio" controls class="col-12">
+      <source src="{src}">
+      <embed  src="{src}">
     </audio>
     <a href="{src}">Download Audio</a>
+    <div id="speed">
+      <p class="pointer" rate="0.25">Rate 0.25</p>
+      <p class="pointer" rate="0.5">Rate 0.5</p>
+      <p class="pointer" rate="0.75">Rate 0.75</p>
+      <p class="pointer" rate="1">Normal</p>
+      <p class="pointer" rate="1.25">Rate 1.25</p>
+      <p class="pointer" rate="1.5">Rate 1.5</p>
+      <p class="pointer" rate="2">Rate 2</p>
+    </div>
   </div>
   <div class="col-7">
     <embed type="text/plain" src="{transcript_src}" class="col-12"></embed>

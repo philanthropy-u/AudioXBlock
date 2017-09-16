@@ -7,6 +7,11 @@
 .audio_block p {
     cursor: pointer;
 }
+.pointer {
+    cursor: pointer;
+}
+
+
 
 * {
     -webkit-box-sizing: border-box;

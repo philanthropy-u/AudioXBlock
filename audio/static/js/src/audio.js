@@ -1,5 +1,8 @@
-// function AudioXBlock(runtime, element) {
-//     console.log('hi there');
-//    var vid = document.getElementById("audio-xblock");
-//   vid.playbackRate = 0.5;
-// }
+function AudioXBlock(runtime, element) {
+    var audio = document.getElementById("audio");
+    $('#speed').children().click(function () {
+        var newRate = parseFloat($(this).attr('rate'));
+        audio.playbackRate = newRate;
+    });
+}
+
