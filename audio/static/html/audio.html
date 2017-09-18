@@ -1,9 +1,17 @@
 <div class="row audio_block">
   <div class="col-5">
-    <audio id="audio" controls class="col-12">
-      <source src="{src}">
-      <embed  src="{src}">
-    </audio>
+    <!--<audio id="audio" controls class="col-12">-->
+      <!--<source src="{src}">-->
+      <!--<embed  src="{src}">-->
+    <!--</audio>-->
+    <audio id="player" src="{src}"></audio>
+    <div>
+      <button onclick="document.getElementById('player').play()">Play</button>
+      <button onclick="document.getElementById('player').pause()">Pause</button>
+      <button onclick="document.getElementById('player').volume += 0.1">Vol+ </button>
+      <button onclick="document.getElementById('player').volume -= 0.1">Vol- </button>
+      <p></p>
+    </div>
     <a href="{src}">Download Audio</a>
     <div id="speed">
       <p class="pointer" rate="0.25">Rate 0.25</p>
