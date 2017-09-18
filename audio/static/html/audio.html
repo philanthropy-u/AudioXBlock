@@ -4,13 +4,18 @@
       <!--<source src="{src}">-->
       <!--<embed  src="{src}">-->
     <!--</audio>-->
-    <audio id="player" src="{src}"></audio>
+    <audio id="audio" src="{src}"></audio>
     <div>
-      <button onclick="document.getElementById('player').play()">Play</button>
-      <button onclick="document.getElementById('player').pause()">Pause</button>
-      <button onclick="document.getElementById('player').volume += 0.1">Vol+ </button>
-      <button onclick="document.getElementById('player').volume -= 0.1">Vol- </button>
-      <p></p>
+      <button id="play-btn">Play</button>
+      <button id="pause-btn">Pause</button>
+      <button id="mute-btn">Mute</button>
+      <br>
+      Volume :
+      <input type="range" min="0" max="1" step="0.01" id="volume">
+      <br>
+      Time lapsed:
+      <input type="range" step="any" id="seekbar">
+      <label id="timer">-:--:--</label>
     </div>
     <a href="{src}">Download Audio</a>
     <div id="speed">
