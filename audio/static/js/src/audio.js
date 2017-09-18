@@ -1,6 +1,33 @@
 function AudioXBlock(runtime, element) {
+    var inc;
     var audio = document.getElementById("audio");
+    audio.addEventListener('loadedmetadata', function() {
+        inc = myCanvas.width / audio.duration;
+        audio.play();
+    });
     var seekbar = document.getElementById('seekbar');
+
+    //________________________ buffering-canvas
+
+    var myCanvas = document.getElementById('my-canvas');
+    var context = myCanvas.getContext('2d');
+    context.fillStyle = 'lightgray';
+    context.fillRect(0, 0, myCanvas.width, myCanvas.height);
+    context.fillStyle = 'red';
+    context.strokeStyle = 'red';
+
+    audio.addEventListener('timeupdate', function() {
+      for ( var i = 0; i < audio.buffered.length; i++) {
+
+        var startX = audio.buffered.start(i) * inc;
+        var endX = audio.buffered.end(i) * inc;
+        var width = endX - startX;
+
+        context.fillRect(startX, 0, width, myCanvas.height);
+        context.rect(startX, 0, width, myCanvas.height);
+        context.stroke();
+      }
+    });
 
     $('#audio').bind('durationchange', function() {
         seekbar.min = 0;
@@ -24,7 +51,7 @@ function AudioXBlock(runtime, element) {
 
 
     $('#volume').val(audio.volume);
-    $('#pause-btn').hide();
+    $('#play-btn').hide();
 
     $('#speed').children().click(function () {
         var newRate = parseFloat($(this).attr('rate'));
