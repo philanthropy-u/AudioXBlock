@@ -3,6 +3,7 @@ function AudioEditBlock(runtime, element) {
     var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
     var data = {
       src: $(element).find('input[name=audio_src]').val(),
+      downloadable_src: $(element).find('input[name=audio_src_downloadable]').val(),
       transcript_src: $(element).find('input[name=transcript_src]').val()
     };
     $.post(handlerUrl, JSON.stringify(data)).done(function(response) {

@@ -14,8 +14,9 @@ class AudioXBlock(XBlock):
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
-    src = String(scope=Scope.settings, help="URL for MP3 file to play")
+    src = String(scope=Scope.settings, help="URL for .ogg file to play")
     transcript_src = String(scope=Scope.settings, help="plain text", default="")
+    downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download")
 
 
     def resource_string(self, path):
@@ -30,7 +31,7 @@ class AudioXBlock(XBlock):
         when viewing courses.
         """
         html = self.resource_string("static/html/audio.html")
-        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src))
+        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
         frag.add_css(self.resource_string("static/css/audio.css"))
 
         js = self.resource_string("static/js/src/audio.js")
@@ -43,7 +44,7 @@ class AudioXBlock(XBlock):
         The view for editing the AudioXBlock parameters inside Studio.
         """
         html = self.resource_string("static/html/audio_edit.html")
-        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src))
+        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
 
         js = self.resource_string("static/js/src/audio_edit.js")
         frag.add_javascript(js)
@@ -58,6 +59,7 @@ class AudioXBlock(XBlock):
         """
         self.src = data.get('src')
         self.transcript_src = data.get('transcript_src')
+        self.downloadable_src = data.get('downloadable_src')
 
         return {'result': 'success'}
 
@@ -69,7 +71,9 @@ class AudioXBlock(XBlock):
         return [
             ("AudioXBlock",
              """<vertical_demo>
-                    <audio src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" transcript_src="http://cpansearch.perl.org/src/MIYAGAWA/Video-Subtitle-SRT-0.01/t/sample.srt"> </audio>
+                    <audio src="https://upload.wikimedia.org/wikipedia/en/4/45/ACDC_-_Back_In_Black-sample.ogg" 
+                    transcript_src="http://cpansearch.perl.org/src/MIYAGAWA/Video-Subtitle-SRT-0.01/t/sample.srt"
+                    downloadable_src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"> </audio>
                 </vertical_demo>
              """),
         ]

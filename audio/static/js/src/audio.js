@@ -24,6 +24,7 @@ function AudioXBlock(runtime, element) {
 
 
     $('#volume').val(audio.volume);
+    $('#pause-btn').hide();
 
     $('#speed').children().click(function () {
         var newRate = parseFloat($(this).attr('rate'));
@@ -52,6 +53,7 @@ function AudioXBlock(runtime, element) {
         $(this).hide();
         $("#play-btn").show();
     });
+
 
     $('#volume').change(function () {
         audio.volume = $(this).val();

@@ -4,7 +4,9 @@
       <!--<source src="{src}">-->
       <!--<embed  src="{src}">-->
     <!--</audio>-->
-    <audio id="audio" src="{src}"></audio>
+    <audio id="audio">
+      <source src="{src}" type="audio/ogg">
+    </audio>
     <div>
       <button id="play-btn">Play</button>
       <button id="pause-btn">Pause</button>
@@ -17,7 +19,7 @@
       <input type="range" step="any" id="seekbar">
       <label id="timer">-:--:--</label>
     </div>
-    <a href="{src}">Download Audio</a>
+    <a href="{downloadable_src}">Download Audio</a>
     <div id="speed">
       <p class="pointer" rate="0.25">Rate 0.25</p>
       <p class="pointer" rate="0.5">Rate 0.5</p>
