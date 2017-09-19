@@ -32,7 +32,7 @@ class AudioXBlock(XBlock):
         """
         html = self.resource_string("static/html/audio.html")
         frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
-        frag.add_css(self.resource_string("static/css/audio.css"))
+        frag.add_css(self.resource_string("static/css/audio.scss"))
 
         js = self.resource_string("static/js/src/audio.js")
         frag.add_javascript(js)
