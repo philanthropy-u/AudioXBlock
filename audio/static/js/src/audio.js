@@ -89,15 +89,24 @@ function AudioXBlock(runtime, element) {
         $("#play-btn").show();
     });
 
+    // volume handler
+    $('#volume').change(function () {
+        audio.volume = $(this).val();
+        if (audio.volume == 0) {
+            audio.muted = true;
+        } else {
+            audio.muted = false;
+        }
+    });
 
     // handler for volume controller click event
     $('#volume-controller').click(function () {
-        if($('#volume').is(":visible")) {
-            $('#volume').hide();
-        }
-        else {
+        // if($('#volume').is(":visible")) {
+        //     $('#volume').hide();
+        // }
+        // else {
             $('#volume').show();
-        }
+        // }
     });
 
     // handler for volume change event
@@ -117,12 +126,12 @@ function AudioXBlock(runtime, element) {
 
     // handler for playback rate button click event
     $('#playback-rate-controller').click(function () {
-        if($('#speed').is(":visible")){
-            $('#speed').hide();
-        }
-        else{
+        // if($('#speed').is(":visible")){
+        //     $('#speed').hide();
+        // }
+        // else{
             $('#speed').show();
-        }
+        // }
 
     });
 
@@ -156,6 +165,7 @@ function AudioXBlock(runtime, element) {
         var h = Math.floor(sec / 3600);
         sec = sec % 3600;
         var min = Math.floor(sec / 60);
+
         sec = Math.ceil(sec % 60);
         if (sec.toString().length < 2) {sec = "0" + sec;}
         if (min.toString().length < 2) {min = "0" + min;}
@@ -164,6 +174,24 @@ function AudioXBlock(runtime, element) {
         seekbar.min = audio.startTime;
         seekbar.max = audio.duration;
         seekbar.value = audio.currentTime;
+    });
+
+
+    $(document).mouseup(function(e) {
+        var container = $('#speed');
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target)) {
+            container.hide();
+        }
+
+        container = $('#volume');
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!container.is(e.target)) {
+            container.hide();
+        }
+
     });
 
 }
