@@ -48,49 +48,47 @@ function AudioXBlock(runtime, element) {
         playBarContext.fillRect(0, 0, playedAudio, playBarCanvas.height);
     });
 
-    // this event is fired when a seek operation completed.
-    // this event is needed to clear the play bar canvas whenever user seek.
+    /*
+    this event is fired when a seek operation completed.
+    this event is needed to clear the play bar canvas whenever user seek.
+    */
     audio.addEventListener('seeked', function() {
         playBarContext.clearRect(0,0,playBarCanvas.width, playBarCanvas.height);
      });
 
+    // Getting DOM references with JQuery
+    var playBtn = $('#play-btn');
+    var volume = $('#volume');
+    var playbackRateSet = $('#speed');
+    var playbackRateBtn = $('#playback-rate-controller');
+    var pauseBtn = $('#pause-btn');
+    var volumeBtn = $('#volume-controller');
+    var seekBar = $('#seekbar');
+    var timer = $('#timer');
 
     // setting up initial state of player
-    $('#play-btn').hide();
-    $('#volume').val(audio.volume);
-    $('#speed').hide();
-    $('#volume').hide();
+    playBtn.hide();
+    volume.val(audio.volume);
+    playbackRateSet.hide();
+    volume.hide();
 
-
-
-    // // handler for mute button click event
-    // $('#mute-btn').click(function () {
-    //     if (audio.muted) {
-    //         audio.muted = false;
-    //         $('#volume').val(audio.volume);
-    //     }
-    //     else {
-    //         audio.muted = true;
-    //         $('#volume').val(0);
-    //     }
-    // });
 
     // handler for play button click event
-    $('#play-btn').click(function () {
+    playBtn.click(function () {
         audio.play();
         $(this).hide();
-        $("#pause-btn").show();
+        pauseBtn.show();
     });
 
     // handler for pause button click event
-    $('#pause-btn').click(function () {
+    pauseBtn.click(function () {
         audio.pause();
         $(this).hide();
-        $("#play-btn").show();
+        playBtn.show();
     });
 
     // volume handler
-    $('#volume').change(function () {
+    volume.change(function () {
         audio.volume = $(this).val();
         if (audio.volume == 0) {
             audio.muted = true;
@@ -100,52 +98,31 @@ function AudioXBlock(runtime, element) {
     });
 
     // handler for volume controller click event
-    $('#volume-controller').click(function () {
-        // if($('#volume').is(":visible")) {
-        //     $('#volume').hide();
-        // }
-        // else {
-            $('#volume').show();
-        // }
-    });
-
-    // handler for volume change event
-    $('#transcript-feature').change(function () {
-        audio.volume = $(this).val();
-        if (audio.volume == 0) {
-            audio.muted = true;
-        } else {
-            audio.muted = false;
-        }
+    volumeBtn.click(function () {
+        volume.show();
     });
 
     // handler for seek change event to current time of audio
-    $('#seekbar').change(function () {
+    seekBar.change(function () {
         audio.currentTime = $(this).val();
     });
 
     // handler for playback rate button click event
-    $('#playback-rate-controller').click(function () {
-        // if($('#speed').is(":visible")){
-        //     $('#speed').hide();
-        // }
-        // else{
-            $('#speed').show();
-        // }
-
+    playbackRateBtn.click(function () {
+        playbackRateSet.show();
     });
 
     // handler for rates buttons click event
-    $('#speed').children().click(function () {
+    playbackRateSet.children().click(function () {
         // getting new playback rate
         var newRate = parseFloat($(this).attr('rate'));
         // setting ne playback rate
         audio.playbackRate = newRate;
 
         // updating the play back rate button state
-        $('#playback-rate-controller').html($(this).html());
+        playbackRateBtn.html($(this).html());
         //updating  rates state
-        $('#speed').hide();
+        playbackRateSet.hide();
     });
 
 
@@ -153,45 +130,41 @@ function AudioXBlock(runtime, element) {
     var seekbar = document.getElementById('seekbar');
 
     // this event is fired when the duration attribute has been updated
-    $('#audio').bind('durationchange', function() {
+    audio.addEventListener('durationchange', function() {
         seekbar.min = 0;
         seekbar.max = audio.duration;
         seekbar.value = 0;
     });
 
     // this event is fired when the time indicated by the currentTime attribute has been updated.
-    $('#audio').bind('timeupdate', function() {
+    audio.addEventListener('timeupdate', function() {
         var sec = audio.currentTime;
         var h = Math.floor(sec / 3600);
         sec = sec % 3600;
         var min = Math.floor(sec / 60);
-
         sec = Math.ceil(sec % 60);
         if (sec.toString().length < 2) {sec = "0" + sec;}
         if (min.toString().length < 2) {min = "0" + min;}
-        // formatting timer
-        document.getElementById('timer').innerHTML = h + ":" + min + ":" + sec;
+        timer.html(h + ":" + min + ":" + sec);
         seekbar.min = audio.startTime;
         seekbar.max = audio.duration;
         seekbar.value = audio.currentTime;
     });
 
+    // this event is fired when playback has stopped.
+    audio.addEventListener('ended', function() {
+        playBtn.show();
+        pauseBtn.hide();
+    });
 
+    // out side click handler for playback rate set and volume controller
     $(document).mouseup(function(e) {
-        var container = $('#speed');
-
-        // if the target of the click isn't the container nor a descendant of the container
-        if (!container.is(e.target)) {
-            container.hide();
+        if (!playbackRateSet.is(e.target)) {
+            playbackRateSet.hide();
         }
-
-        container = $('#volume');
-
-        // if the target of the click isn't the container nor a descendant of the container
-        if (!container.is(e.target)) {
-            container.hide();
+        if (!volume.is(e.target)) {
+            volume.hide();
         }
-
     });
 
 }

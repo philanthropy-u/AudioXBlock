@@ -14,10 +14,13 @@ class AudioXBlock(XBlock):
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
-    src = String(scope=Scope.settings, help="URL for .ogg file to play")
-    transcript_src = String(scope=Scope.settings, help="plain text", default="")
-    downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download")
 
+    # this variable holds the source of main media file
+    src = String(scope=Scope.settings, help="URL for .ogg file to play")
+    # reference for script file
+    transcript_src = String(scope=Scope.settings, help="plain text", default="")
+    # holds the downloadable link of media file
+    downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download")
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -77,7 +80,3 @@ class AudioXBlock(XBlock):
                 </vertical_demo>
              """),
         ]
-
-# < audio
-# src = "http://www.archive.org/download/MITCMS_608F10/MITCMS_608F10lec02.mp3"
-# transcript_src = "https://ocw.mit.edu/courses/comparative-media-studies-writing/cms-608-game-design-fall-2010/audio-lectures/lecture-2-iterative-design/68554.srt" > < / audio >
