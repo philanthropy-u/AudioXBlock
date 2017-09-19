@@ -25,12 +25,12 @@ function AudioXBlock(runtime, element) {
 
 
     // setting up the buffering canvas
-    bufferingCanvasContext.fillStyle = 'blue';
+    bufferingCanvasContext.fillStyle = '#4F595D';
     bufferingCanvasContext.fillRect(0, 0, bufferingCanvas.width, bufferingCanvas.height);
-    bufferingCanvasContext.fillStyle = 'red';
+    bufferingCanvasContext.fillStyle = '#697275';
 
     //setting up the play bar canvas
-    playBarContext.fillStyle = 'green';
+    playBarContext.fillStyle = '#CD578D';
 
 
     // this event will fired when the time indicated by the currentTime attribute has been updated.
@@ -146,7 +146,7 @@ function AudioXBlock(runtime, element) {
         var h = Math.floor(sec / 3600);
         sec = sec % 3600;
         var min = Math.floor(sec / 60);
-        sec = Math.floor(sec % 60);
+        sec = Math.ceil(sec % 60);
         if (sec.toString().length < 2) {sec = "0" + sec;}
         if (min.toString().length < 2) {min = "0" + min;}
         // formatting timer
