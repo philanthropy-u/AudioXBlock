@@ -3,7 +3,6 @@ function AudioXBlock(runtime, element) {
     // reference of main audio file
     var audio = document.getElementById("audio");
 
-
     // reference of buffering canvas, that indicates audio file buffered progress
     var bufferingCanvas = document.getElementById('buffering-canvas');
     // context of buffering canvas
@@ -60,20 +59,21 @@ function AudioXBlock(runtime, element) {
     $('#play-btn').hide();
     $('#volume').val(audio.volume);
     $('#speed').hide();
+    $('#volume').hide();
 
 
 
-    // handler for mute button click event
-    $('#mute-btn').click(function () {
-        if (audio.muted) {
-            audio.muted = false;
-            $('#volume').val(audio.volume);
-        }
-        else {
-            audio.muted = true;
-            $('#volume').val(0);
-        }
-    });
+    // // handler for mute button click event
+    // $('#mute-btn').click(function () {
+    //     if (audio.muted) {
+    //         audio.muted = false;
+    //         $('#volume').val(audio.volume);
+    //     }
+    //     else {
+    //         audio.muted = true;
+    //         $('#volume').val(0);
+    //     }
+    // });
 
     // handler for play button click event
     $('#play-btn').click(function () {
@@ -90,8 +90,18 @@ function AudioXBlock(runtime, element) {
     });
 
 
+    // handler for volume controller click event
+    $('#volume-controller').click(function () {
+        if($('#volume').is(":visible")) {
+            $('#volume').hide();
+        }
+        else {
+            $('#volume').show();
+        }
+    });
+
     // handler for volume change event
-    $('#volume').change(function () {
+    $('#transcript-feature').change(function () {
         audio.volume = $(this).val();
         if (audio.volume == 0) {
             audio.muted = true;
