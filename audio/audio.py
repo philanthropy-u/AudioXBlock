@@ -75,7 +75,7 @@ class AudioXBlock(XBlock):
             ("AudioXBlock",
              """<vertical_demo>
                     <audio src="http://soundimage.org/wp-content/uploads/2014/04/City-Beneath-the-Waves.mp3" 
-                    transcript_src="http://cpansearch.perl.org/src/MIYAGAWA/Video-Subtitle-SRT-0.01/t/sample.srt"
+                    transcript_src="http://norvig.com/big.txt"
                     downloadable_src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"> </audio>
                 </vertical_demo>
              """),

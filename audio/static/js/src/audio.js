@@ -167,6 +167,10 @@ function AudioXBlock(runtime, element) {
         }
     });
 
+    //______________
+
+    document.getElementById("transcript-embed").height = "305";
+
 }
 
 
