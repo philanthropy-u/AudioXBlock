@@ -7,3 +7,7 @@ element and render the transcript as plain text. If unavailable, it will fall ba
 Usage: 
 
     <audio src="http://server.tld/static/song.mp3" transcript_src="http://transcripts.com/sample.srt"/>
+
+    open-edx:
+
+        key : "audio"
