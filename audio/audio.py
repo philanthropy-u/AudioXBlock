@@ -14,10 +14,13 @@ class AudioXBlock(XBlock):
 
     # Fields are defined on the class.  You can access them in your code as
     # self.<fieldname>.
-    src = String(
-           scope = Scope.settings, 
-           help = "URL for MP3 file to play"
-        )
+
+    # this variable holds the source of main media file
+    src = String(scope=Scope.settings, help="URL for .ogg file to play")
+    # reference for script file
+    transcript_src = String(scope=Scope.settings, help="plain text", default="")
+    # holds the downloadable link of media file
+    downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download")
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -31,8 +34,12 @@ class AudioXBlock(XBlock):
         when viewing courses.
         """
         html = self.resource_string("static/html/audio.html")
-        frag = Fragment(html.format(src = self.src))
-        frag.add_css(self.resource_string("static/css/audio.css"))
+        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
+        frag.add_css(self.resource_string("static/css/audio.scss"))
+
+        js = self.resource_string("static/js/src/audio.js")
+        frag.add_javascript(js)
+        frag.initialize_js('AudioXBlock')
         return frag
 
     def studio_view(self, context):
@@ -40,7 +47,7 @@ class AudioXBlock(XBlock):
         The view for editing the AudioXBlock parameters inside Studio.
         """
         html = self.resource_string("static/html/audio_edit.html")
-        frag = Fragment(html.format(src=self.src))
+        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
 
         js = self.resource_string("static/js/src/audio_edit.js")
         frag.add_javascript(js)
@@ -54,6 +61,8 @@ class AudioXBlock(XBlock):
         Called when submitting the form in Studio.
         """
         self.src = data.get('src')
+        self.transcript_src = data.get('transcript_src')
+        self.downloadable_src = data.get('downloadable_src')
 
         return {'result': 'success'}
 
@@ -65,9 +74,9 @@ class AudioXBlock(XBlock):
         return [
             ("AudioXBlock",
              """<vertical_demo>
-                  <audio src="http://localhost/Ikea.mp3"> </audio>
-                  <audio src="http://localhost/skull.mp3"> </audio>
-                  <audio src="http://localhost/monkey.mp3"> </audio>
+                    <audio src="https://upload.wikimedia.org/wikipedia/en/4/45/ACDC_-_Back_In_Black-sample.ogg" 
+                    transcript_src="http://norvig.com/big.txt"
+                    downloadable_src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"> </audio>
                 </vertical_demo>
              """),
         ]
