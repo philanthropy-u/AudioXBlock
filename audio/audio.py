@@ -74,7 +74,7 @@ class AudioXBlock(XBlock):
         return [
             ("AudioXBlock",
              """<vertical_demo>
-                    <audio src="http://soundimage.org/wp-content/uploads/2014/04/City-Beneath-the-Waves.mp3" 
+                    <audio src="https://upload.wikimedia.org/wikipedia/en/4/45/ACDC_-_Back_In_Black-sample.ogg" 
                     transcript_src="http://norvig.com/big.txt"
                     downloadable_src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"> </audio>
                 </vertical_demo>
