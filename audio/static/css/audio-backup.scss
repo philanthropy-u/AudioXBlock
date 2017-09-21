@@ -228,22 +228,13 @@
     top: -34px;
 }
 
-input[type=range].slider * {
-  border: none !important;
-  border-radius: 0 !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
 
-input[type=range].slider:focus {
-}
 
 input[type=range].slider {
   -webkit-appearance: none;
-  -moz-appearance: none;
   width: 100%;
   margin: 0;
-  position: relative;
+    position: relative;
 }
 input[type=range].slider:focus {
   outline: none;
