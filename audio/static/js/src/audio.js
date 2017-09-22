@@ -19,7 +19,6 @@ function AudioXBlock(runtime, element) {
     // loading the meta data for audio file, e.g. audio length, and playing automatically
     audio.addEventListener('loadedmetadata', function() {
         bufferIncrement = bufferingCanvas.width / audio.duration;
-        audio.play();
     });
 
 
@@ -67,7 +66,7 @@ function AudioXBlock(runtime, element) {
     var timer = $('#timer');
 
     // setting up initial state of player
-    playBtn.hide();
+    pauseBtn.hide();
     volume.val(audio.volume);
     playbackRateSet.hide();
     volume.hide();
@@ -88,7 +87,7 @@ function AudioXBlock(runtime, element) {
     });
 
     // volume handler
-    volume.change(function () {
+    volume.bind('mousemove', function () {
         audio.volume = $(this).val();
         if (audio.volume == 0) {
             audio.muted = true;
@@ -172,7 +171,3 @@ function AudioXBlock(runtime, element) {
     document.getElementById("transcript-embed").height = "100%";
 
 }
-
-
-
-
