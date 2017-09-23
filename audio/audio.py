@@ -47,7 +47,7 @@ class AudioXBlock(XBlock):
         """
         html = self.resource_string("static/html/audio_edit.html")
         frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
-
+        frag.add_css(self.resource_string("static/css/audio_edit.scss"))
         js = self.resource_string("static/js/src/audio_edit.js")
         frag.add_javascript(js)
         frag.initialize_js('AudioEditBlock')
@@ -73,9 +73,12 @@ class AudioXBlock(XBlock):
         return [
             ("AudioXBlock",
              """<vertical_demo>
-                    <audio src="https://upload.wikimedia.org/wikipedia/en/4/45/ACDC_-_Back_In_Black-sample.ogg" 
+                    <audio src="https://upload.wikimedia.org/wikipedia/en/9/9f/Sample_of_%22Another_Day_in_Paradise%22.ogg" 
                     transcript_src="http://norvig.com/big.txt"
                     downloadable_src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"> </audio>
-                </vertical_demo>
+                    <audio src="https://upload.wikimedia.org/wikipedia/en/9/9f/Sample_of_%22Another_Day_in_Paradise%22.ogg" 
+                    transcript_src="http://norvig.com/big.txt"
+                    downloadable_src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"> </audio>
+                 </vertical_demo>
              """),
         ]

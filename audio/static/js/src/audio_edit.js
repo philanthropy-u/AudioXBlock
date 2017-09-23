@@ -1,5 +1,5 @@
 function AudioEditBlock(runtime, element) {
-  $(element).find('.save-button').bind('click', function() {
+  $(element).find('.action-save').bind('click', function() {
     var handlerUrl = runtime.handlerUrl(element, 'studio_submit');
     var data = {
       src: $(element).find('input[name=audio_src]').val(),
@@ -11,7 +11,7 @@ function AudioEditBlock(runtime, element) {
     });
   });
 
-  $(element).find('.cancel-button').bind('click', function() {
+  $(element).find('.action-cancel').bind('click', function() {
     runtime.notify('cancel', {});
   });
 }
