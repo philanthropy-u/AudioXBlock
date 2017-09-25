@@ -34,6 +34,7 @@ class AudioXBlock(XBlock):
     downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download", default="")
     is_transcript_url_valid = String(scope=Scope.settings, help="transcript url validation flag", default="True")
 
+
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
         data = pkg_resources.resource_string(__name__, path)
@@ -62,6 +63,7 @@ class AudioXBlock(XBlock):
                                     transcript_src=self.transcript_src,
                                     downloadable_src=self.downloadable_src,
                                     is_transcript_url_valid=self.is_transcript_url_valid))
+
         frag.add_css(self.resource_string("static/css/audio.scss"))
         js = self.resource_string("static/js/src/audio.js")
         frag.add_javascript(js)
