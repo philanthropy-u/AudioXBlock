@@ -70,10 +70,10 @@ function AudioXBlock(runtime, element) {
         audioPlayerDiv.addClass('col-12');
     }
 
-
-    if(transcript.attr('src') === 'error'){
+    if(transcript.attr('is-transcript-url-valid') === "False"){
         noAudioTranscriptMessage.show();
         transcript.hide();
+        transcriptDownloadableLink.show();
     }
 
     // loading the meta data for audio file, e.g. audio length, and playing automatically

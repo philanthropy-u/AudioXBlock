@@ -1,6 +1,7 @@
 <div class="row audio_block">
     <div class="col-6" id="audio-player-div">
-            <h4 class="hd hd-4 video-error" id="no-audio-source">No playable audio source found.</h4>
+            <h3 class="hd hd-4 video-error" id="no-audio-source">* No playable audio source found.</h3>
+            <h3 class="hd hd-4 video-error" id="no-transcript-source">* Invalid transcript source.</h3>
         <div class="audio-img">
 
         </div>
@@ -47,12 +48,11 @@
         <br>
         <h4 id="downloads-heading">Downloads:</h4>
         <div id="downloads-div" class="download-links">
-            <a id="transcript-link" href="{transcript_src}" download>Transcript ( .txt )</a>
-            <a id="audio-link" href="{downloadable_src}" download>Audio ( .mp3 )</a>
+            <a id="transcript-link" href="{transcript_src}" download>Transcript</a>
+            <a id="audio-link" href="{downloadable_src}" download>Audio (.mp3)</a>
         </div>
     </div>
     <div class="col-6" id="transcript-div-id">
-        <h4 class="hd hd-4 video-error" id="no-transcript-source">No transcript source found.</h4>
-        <embed id="transcript-embed" type="text/plain" src="{transcript_src}" class="col-12"></embed>
+        <embed is-transcript-url-valid="{is_transcript_url_valid}" id="transcript-embed" type="text/plain" src="{transcript_src}" class="col-12"></embed>
     </div>
 </div>
