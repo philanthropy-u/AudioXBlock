@@ -32,6 +32,8 @@ class AudioXBlock(XBlock):
     transcript_src = String(scope=Scope.settings, help="plain text", default="")
     # holds the downloadable link of media file
     downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download", default="")
+    is_transcript_url_valid = String(scope=Scope.settings, help="transcript url validation flag", default="True")
+
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -48,14 +50,20 @@ class AudioXBlock(XBlock):
         # Validate transcript link.
         if self.transcript_src:
             if not regex.match(self.transcript_src):
-                self.transcript_src = 'error'
+                self.transcript_src = ''
+                self.is_transcript_url_valid = "False"
             else:
                 r = requests.get(self.transcript_src)
                 content_type = r.headers['content-type']
                 if "text/plain" != content_type:
-                    self.transcript_src = 'error'
+                    self.transcript_src = ''
+                    self.is_transcript_url_valid = "False"
 
-        frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
+        frag = Fragment(html.format(src=self.src,
+                                    transcript_src=self.transcript_src,
+                                    downloadable_src=self.downloadable_src,
+                                    is_transcript_url_valid=self.is_transcript_url_valid))
+
         frag.add_css(self.resource_string("static/css/audio.scss"))
         js = self.resource_string("static/js/src/audio.js")
         frag.add_javascript(js)
@@ -97,8 +105,8 @@ class AudioXBlock(XBlock):
                     transcript_src="http://humanstxt.org/humans.txt"
                     downloadable_src="sdfsdf.mp3"> </audio>
                     <audio src="" 
-                    transcript_src=""
-                    downloadable_src=""> </audio>
+                    transcript_src="sdrfserf.txt"
+                    downloadable_src="fasdf.mp3"> </audio>
                  </vertical_demo>
              """),
         ]
