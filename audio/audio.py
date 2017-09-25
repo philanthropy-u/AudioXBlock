@@ -5,6 +5,7 @@ import pkg_resources
 from xblock.core import XBlock
 from xblock.fields import Scope, Integer, String
 from xblock.fragment import Fragment
+
 import re
 import requests
 
@@ -44,14 +45,15 @@ class AudioXBlock(XBlock):
         """
         html = self.resource_string("static/html/audio.html")
 
-        # Validate Stuff
-        if not regex.match(self.transcript_src):
-            self.transcript_src = 'error'
-        else:
-            r = requests.get(self.transcript_src)
-            content_type = r.headers['content-type']
-            if "text/plain" != content_type:
+        # Validate transcript link.
+        if self.transcript_src:
+            if not regex.match(self.transcript_src):
                 self.transcript_src = 'error'
+            else:
+                r = requests.get(self.transcript_src)
+                content_type = r.headers['content-type']
+                if "text/plain" != content_type:
+                    self.transcript_src = 'error'
 
         frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
         frag.add_css(self.resource_string("static/css/audio.scss"))
@@ -91,8 +93,11 @@ class AudioXBlock(XBlock):
         return [
             ("AudioXBlock",
              """<vertical_demo>
-                    <audio src="" 
+                    <audio src="https://upload.wikimedia.org/wikipedia/en/4/45/ACDC_-_Back_In_Black-sample.ogg" 
                     transcript_src="http://humanstxt.org/humans.txt"
+                    downloadable_src="sdfsdf.mp3"> </audio>
+                    <audio src="" 
+                    transcript_src=""
                     downloadable_src=""> </audio>
                  </vertical_demo>
              """),

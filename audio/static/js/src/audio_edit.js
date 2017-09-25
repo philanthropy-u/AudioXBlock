@@ -1,17 +1,5 @@
 function AudioEditBlock(runtime, element) {
 
-    // var audioSrc = $(element).find('#audio_src');
-    // var audioSrcDownloadable = $(element).find('#audio_src_downloadable');
-    // var transcriptSrc = $(element).find('#transcript_src');
-    //
-    // audioSrc.on('input', function () {
-    //    if(audioSrc.val().endsWith('.ogg')) {
-    //        console.log("ok");
-    //    } else {
-    //        console.log("invalid");
-    //    }
-    // });
-
     $(element).parents('.edit-xblock-modal').find('.action-save').unbind('click').bind('click', function(evt){
         evt.preventDefault();
         var handlerUrl = runtime.handlerUrl(element, 'studio_submit');

@@ -29,15 +29,20 @@ function AudioXBlock(runtime, element) {
     var audioDownloadableSrc = $(element).find('#audio-link').attr('href');
 
     var noAudioSourceMessage = $(element).find('#no-audio-source')
+    var noAudioTranscriptMessage = $(element).find('#no-transcript-source')
     var audioPlayerDiv = $(element).find('#audio-player-div');
     var transcriptDiv = $(element).find('#transcript-div-id');
+    var transcriptDownloadableLink = $(element).find('#transcript-link');
+    var downloadsHeading = $(element).find('#downloads-heading');
+    var downloadsDiv = $(element).find('#downloads-div');
 
     // setting up initial state of player
     pauseBtn.hide();
     volume.val(audio[0].volume);
     playbackRateSet.hide();
     volume.hide();
-    seekBar.value = 0;
+    seekBar[0].value = 0;
+    noAudioTranscriptMessage.hide();
 
     if(!audioSrc.endsWith('.ogg')){
         noAudioSourceMessage.show();
@@ -47,15 +52,15 @@ function AudioXBlock(runtime, element) {
     }
 
     if(!transcript.attr('src') && !audioDownloadableSrc) {
-        $(element).find('#downloads-div').hide();
-        $(element).find('#downloads-heading').hide();
+        downloadsDiv.hide();
+        downloadsHeading.hide();
     } else if(!transcript.attr('src')){
-        $(element).find('#downloads-div').show();
-        $(element).find('#downloads-heading').show();
-        $(element).find('#transcript-link').hide();
+        downloadsDiv.show();
+        downloadsHeading.show();
+        transcriptDownloadableLink.hide();
     } else if(!audioDownloadableSrc){
-        $(element).find('#downloads-div').show();
-        $(element).find('#downloads-heading').show();
+        downloadsDiv.show();
+        downloadsHeading.show();
         $(element).find('#audio-link').hide();
     }
 
@@ -65,8 +70,11 @@ function AudioXBlock(runtime, element) {
         audioPlayerDiv.addClass('col-12');
     }
 
-    console.log(transcript.attr('src'));
 
+    if(transcript.attr('src') === 'error'){
+        noAudioTranscriptMessage.show();
+        transcript.hide();
+    }
 
     // loading the meta data for audio file, e.g. audio length, and playing automatically
     audio.bind('loadedmetadata', function() {
