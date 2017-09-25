@@ -32,7 +32,6 @@ class AudioXBlock(XBlock):
     transcript_src = String(scope=Scope.settings, help="plain text", default="")
     # holds the downloadable link of media file
     downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download", default="")
-    is_transcript_url_valid = String(scope=Scope.settings, help="transcript url validation flag", default="True")
 
 
     def resource_string(self, path):
@@ -47,22 +46,29 @@ class AudioXBlock(XBlock):
         """
         html = self.resource_string("static/html/audio.html")
 
+        is_transcript_url_valid = "True"
+        transcript_src = self.transcript_src
+
         # Validate transcript link.
-        if self.transcript_src:
-            if not regex.match(self.transcript_src):
-                self.transcript_src = ''
-                self.is_transcript_url_valid = "False"
+        if transcript_src:
+            if not regex.match(transcript_src):
+                transcript_src = ''
+                is_transcript_url_valid = "False"
             else:
-                r = requests.get(self.transcript_src)
-                content_type = r.headers['content-type']
-                if "text/plain" != content_type:
-                    self.transcript_src = ''
-                    self.is_transcript_url_valid = "False"
+                try:
+                    r = requests.get(transcript_src)
+                    content_type = r.headers['content-type']
+                    if "text/plain" != content_type:
+                        transcript_src = ''
+                        is_transcript_url_valid = "False"
+                except:
+                    transcript_src = ''
+                    is_transcript_url_valid = "False"
 
         frag = Fragment(html.format(src=self.src,
-                                    transcript_src=self.transcript_src,
+                                    transcript_src=transcript_src,
                                     downloadable_src=self.downloadable_src,
-                                    is_transcript_url_valid=self.is_transcript_url_valid))
+                                    is_transcript_url_valid=is_transcript_url_valid))
 
         frag.add_css(self.resource_string("static/css/audio.scss"))
         js = self.resource_string("static/js/src/audio.js")
@@ -103,10 +109,10 @@ class AudioXBlock(XBlock):
              """<vertical_demo>
                     <audio src="https://upload.wikimedia.org/wikipedia/en/4/45/ACDC_-_Back_In_Black-sample.ogg" 
                     transcript_src="http://humanstxt.org/humans.txt"
-                    downloadable_src="sdfsdf.mp3"> </audio>
+                    downloadable_src="sample.mp3"> </audio>
                     <audio src="" 
-                    transcript_src="sdrfserf.txt"
-                    downloadable_src="fasdf.mp3"> </audio>
+                    transcript_src=""
+                    downloadable_src=""> </audio>
                  </vertical_demo>
              """),
         ]
