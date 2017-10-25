@@ -64,7 +64,7 @@ function AudioXBlock(runtime, element) {
         $(element).find('#audio-link').hide();
     }
 
-    if(!transcript.attr('src')){
+    if(!transcript.data('src')){
         transcriptDiv.hide();
         audioPlayerDiv.removeClass('col-6');
         audioPlayerDiv.addClass('col-12');
