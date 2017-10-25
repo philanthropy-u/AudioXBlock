@@ -1,17 +1,23 @@
 """TO-DO: This XBlock will play an MP3 file as an HTML5 audio element. """
 
 import pkg_resources
+import requests
 
 from xblock.core import XBlock
 from xblock.fields import Scope, Integer, String
 from xblock.fragment import Fragment
 
+from mimetypes import MimeTypes
+import urllib
 import re
-import requests
 
 regex = re.compile(
-        r'((([A-Za-z]{3,9}:(?:\/\/)?)(?:[-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+|(?:www.|[-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?(?:[\w]*))?)',
-        re.IGNORECASE)
+        r'^(?:http|ftp)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 
 class AudioXBlock(XBlock):
@@ -44,16 +50,24 @@ class AudioXBlock(XBlock):
 
         is_transcript_url_valid = "True"
         transcript_src = self.transcript_src
-
+        content = ""
+        transcript_class = 'hidden'
         # Validate transcript link.
         if transcript_src:
-            if not regex.match(transcript_src):
+            try:
+                result = re.match(regex, transcript_src)
+            except Exception as ex:
+                pass
+
+            if not result:
                 transcript_src = ''
                 is_transcript_url_valid = "False"
             else:
                 try:
-                    r = requests.get(transcript_src)
-                    content_type = r.headers['content-type']
+                    mime = MimeTypes()
+                    file = urllib.pathname2url(transcript_src)
+                    content_type, jj = mime.guess_type(file)
+
                     if "text/plain" != content_type:
                         transcript_src = ''
                         is_transcript_url_valid = "False"
@@ -61,7 +75,14 @@ class AudioXBlock(XBlock):
                     transcript_src = ''
                     is_transcript_url_valid = "False"
 
+            if is_transcript_url_valid:
+                r = requests.get(transcript_src)
+                content = r.text
+                transcript_class = 'audio-transcript'
+
         frag = Fragment(html.format(src=self.src,
+                                    transcript=content,
+                                    transcript_class=transcript_class,
                                     transcript_src=transcript_src,
                                     downloadable_src=self.downloadable_src,
                                     is_transcript_url_valid=is_transcript_url_valid))
