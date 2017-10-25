@@ -52,6 +52,7 @@ class AudioXBlock(XBlock):
         transcript_src = self.transcript_src
         content = ""
         transcript_class = 'hidden'
+        transcript_link_class = 'hidden'
         # Validate transcript link.
         if transcript_src:
             try:
@@ -75,14 +76,16 @@ class AudioXBlock(XBlock):
                     transcript_src = ''
                     is_transcript_url_valid = "False"
 
-            if is_transcript_url_valid:
+            if is_transcript_url_valid == "True":
                 r = requests.get(transcript_src)
                 content = r.text
                 transcript_class = 'audio-transcript'
+                transcript_link_class = ''
 
         frag = Fragment(html.format(src=self.src,
                                     transcript=content,
                                     transcript_class=transcript_class,
+                                    transcript_link_class=transcript_link_class,
                                     transcript_src=transcript_src,
                                     downloadable_src=self.downloadable_src,
                                     is_transcript_url_valid=is_transcript_url_valid))
