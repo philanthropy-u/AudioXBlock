@@ -24,17 +24,6 @@ function AudioXBlock(runtime, element) {
     var volumeBtn = $(element).find('#volume-controller');
     var seekBar = $(element).find('#seekbar');
     var timer = $(element).find('#timer');
-    var transcript = $(element).find('#transcript-embed');
-    var audioSrc = $(element).find('#audio_src').attr('src');
-    var audioDownloadableSrc = $(element).find('#audio-link').attr('href');
-
-    var noAudioSourceMessage = $(element).find('#no-audio-source')
-    var noAudioTranscriptMessage = $(element).find('#no-transcript-source')
-    var audioPlayerDiv = $(element).find('#audio-player-div');
-    var transcriptDiv = $(element).find('#transcript-div-id');
-    var transcriptDownloadableLink = $(element).find('#transcript-link');
-    var downloadsHeading = $(element).find('#downloads-heading');
-    var downloadsDiv = $(element).find('#downloads-div');
 
     // setting up initial state of player
     pauseBtn.hide();
@@ -42,33 +31,7 @@ function AudioXBlock(runtime, element) {
     playbackRateSet.hide();
     volume.hide();
     seekBar[0].value = 0;
-    noAudioTranscriptMessage.hide();
 
-    if(!audioSrc.endsWith('.ogg')){
-        noAudioSourceMessage.show();
-    }
-    else{
-        noAudioSourceMessage.hide();
-    }
-
-    if(!transcript.attr('src') && !audioDownloadableSrc) {
-        downloadsDiv.hide();
-        downloadsHeading.hide();
-    } else if(!transcript.attr('src')){
-        downloadsDiv.show();
-        downloadsHeading.show();
-        transcriptDownloadableLink.hide();
-    } else if(!audioDownloadableSrc){
-        downloadsDiv.show();
-        downloadsHeading.show();
-        $(element).find('#audio-link').hide();
-    }
-
-    if(transcript.attr('is-transcript-url-valid') === "False"){
-        noAudioTranscriptMessage.show();
-        transcript.hide();
-        transcriptDownloadableLink.show();
-    }
 
     // loading the meta data for audio file, e.g. audio length, and playing automatically
     audio.bind('loadedmetadata', function() {
@@ -203,9 +166,4 @@ function AudioXBlock(runtime, element) {
             volume.hide();
         }
     });
-
-    //______________
-
-
-    transcript[0].height = "100%";
 }

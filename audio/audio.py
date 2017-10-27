@@ -10,6 +10,8 @@ from xblock.fragment import Fragment
 from mimetypes import MimeTypes
 import urllib
 import re
+from xblockutils.resources import ResourceLoader
+loader = ResourceLoader(__name__)
 
 regex = re.compile(
         r'^(?:http|ftp)s?://' # http:// or https://
@@ -35,6 +37,24 @@ class AudioXBlock(XBlock):
     # holds the downloadable link of media file
     downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download", default="")
 
+    def get_fragment(self, context):
+        """
+        return fragment after loading css/js/html either for studio OR student view
+        :param context: context for templates
+        :param view: view_type i;e studio/student
+        :return: fragment after loading all assets
+        """
+        """
+            Return fragment after adding required css/js/html
+        """
+        fragment = Fragment()
+        fragment.add_content(loader.render_template("static/html/audio.html", context))
+        fragment.add_css(self.resource_string("static/css/audio.scss"))
+        js = self.resource_string("static/js/src/audio.js")
+        fragment.add_javascript(js)
+
+        fragment.initialize_js('AudioXBlock')
+        return fragment
 
     def resource_string(self, path):
         """Handy helper for getting resources from our kit."""
@@ -46,13 +66,11 @@ class AudioXBlock(XBlock):
         The primary view of the AudioXBlock, shown to students
         when viewing courses.
         """
-        html = self.resource_string("static/html/audio.html")
 
-        is_transcript_url_valid = "True"
+        is_transcript_url_valid = True
         transcript_src = self.transcript_src
         content = ""
-        transcript_class = 'hidden'
-        transcript_link_class = 'hidden'
+
         # Validate transcript link.
         if transcript_src:
             try:
@@ -62,7 +80,7 @@ class AudioXBlock(XBlock):
 
             if not result:
                 transcript_src = ''
-                is_transcript_url_valid = "False"
+                is_transcript_url_valid = False
             else:
                 try:
                     mime = MimeTypes()
@@ -71,29 +89,29 @@ class AudioXBlock(XBlock):
 
                     if "text/plain" != content_type:
                         transcript_src = ''
-                        is_transcript_url_valid = "False"
+                        is_transcript_url_valid = False
                 except:
                     transcript_src = ''
-                    is_transcript_url_valid = "False"
+                    is_transcript_url_valid = False
 
-            if is_transcript_url_valid == "True":
-                r = requests.get(transcript_src)
-                content = r.text
-                transcript_class = 'audio-transcript'
-                transcript_link_class = ''
+            if is_transcript_url_valid:
+                try:
+                    r = requests.get(transcript_src)
+                    content = r.text
+                except:
+                    content = ''
+                    is_transcript_url_valid = False
+        else:
+            is_transcript_url_valid = False
 
-        frag = Fragment(html.format(src=self.src,
-                                    transcript=content,
-                                    transcript_class=transcript_class,
-                                    transcript_link_class=transcript_link_class,
-                                    transcript_src=transcript_src,
-                                    downloadable_src=self.downloadable_src,
-                                    is_transcript_url_valid=is_transcript_url_valid))
+        frag = self.get_fragment(context={
+            'src': self.src,
+            'transcript': content,
+            'transcript_src': self.transcript_src,
+            'downloadable_src': self.downloadable_src,
+            'is_transcript_url_valid': is_transcript_url_valid
+        })
 
-        frag.add_css(self.resource_string("static/css/audio.scss"))
-        js = self.resource_string("static/js/src/audio.js")
-        frag.add_javascript(js)
-        frag.initialize_js('AudioXBlock')
         return frag
 
     def studio_view(self, context):
