@@ -1,7 +1,7 @@
 <div class="row audio_block">
-    <div class="col-6" id="audio-player-div">
-            <h3 class="hd hd-4 video-error" id="no-audio-source">* No playable audio source found.</h3>
-            <h3 class="hd hd-4 video-error" id="no-transcript-source">* Invalid transcript source.</h3>
+    <div class="col-8" id="audio-player-div">
+            {% if not src %}<h3 class="hd hd-4 video-error">* No playable audio source found.</h3>{% endif %}
+            {% if not is_transcript_url_valid %}<h3 class="hd hd-4 video-error">* Invalid transcript source.</h3>{% endif %}
         <div class="audio-img">
 
         </div>
@@ -43,16 +43,25 @@
             </div>
         </div>
         <audio id="audio">
-            <source id="audio_src" src="{src}" type="audio/ogg">
+            <source id="audio_src" src="{{src}}" type="audio/ogg">
         </audio>
         <br>
-        <h4 id="downloads-heading">Downloads:</h4>
-        <div id="downloads-div" class="download-links">
-            <a class="{transcript_link_class}" href="{transcript_src}" download>Transcript</a>
-            <a id="audio-link" href="{downloadable_src}" download>Audio (.mp3)</a>
+         {% if is_transcript_url_valid or downloadable_src %}
+            <h4 id="downloads-heading" class="">Downloads:</h4>
+         {% endif %}
+         <div id="downloads-div" class="download-links ">
+            {% if is_transcript_url_valid and transcript_src %}
+                <a class="{no_transcript_class}" href="{{transcript_src}}" download>Transcript</a>
+            {% endif %}
+            {% if downloadable_src %}
+                <a id="audio-link" class="{no_mp3_class}" href="{{downloadable_src}}" download>Audio (.mp3)</a>
+            {% endif %}
+         </div>
+
+    </div>
+    {% if is_transcript_url_valid %}
+        <div class="col-4">
+            <div class="audio-transcript"><pre>{{transcript}}</pre></div>
         </div>
-    </div>
-    <div class="col-6 {transcript_class}">
-        <div is-transcript-url-valid="{is_transcript_url_valid}" class="col-12"><pre>{transcript}</pre></div>
-    </div>
+    {% endif %}
 </div>
