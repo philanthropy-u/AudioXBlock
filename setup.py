@@ -15,9 +15,9 @@ def package_data(pkg, root):
 
 
 setup(
-    name='audio-xblock',
+    name='Audio-xblock',
     version='0.1',
-    description='audio XBlock',   # TODO: write a better description.
+    description='Audio XBlock with Subtitles',
     packages=[
         'audio',
     ],
