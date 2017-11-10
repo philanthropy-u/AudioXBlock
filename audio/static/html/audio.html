@@ -1,7 +1,7 @@
 <div class="row audio_block">
     <div class="col-8" id="audio-player-div">
-            {% if not src %}<h3 class="hd hd-4 video-error">* No playable audio source found.</h3>{% endif %}
-            {% if not is_transcript_url_valid %}<h3 class="hd hd-4 video-error">* Invalid transcript source.</h3>{% endif %}
+            {% if not src %}<div class="hd hd-4 video-error">* Audio playback source in invalid.</div>{% endif %}
+            {% if not is_transcript_url_valid %}<div class="hd hd-4 video-error">* Transcript source is invalid.</div>{% endif %}
         <div class="audio-img">
 
         </div>
