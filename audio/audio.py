@@ -116,7 +116,7 @@ class AudioXBlock(XBlock):
 
     def student_view_data(self, context=None):
         """
-        Return JSON data for mobile APIs
+        Return JSON data for student view
         """
         return {
             'transcripts': self.transcript_src,
