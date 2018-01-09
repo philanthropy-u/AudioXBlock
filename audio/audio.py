@@ -114,6 +114,18 @@ class AudioXBlock(XBlock):
 
         return frag
 
+    def student_view_data(self, context=None):
+        """
+        Return JSON data for student view
+        """
+        return {
+            'transcripts': self.transcript_src,
+            'playable_audio': {
+                'mp3': self.downloadable_src,
+                'ogg': self.src
+            }
+        }
+
     def studio_view(self, context):
         """
         The view for editing the AudioXBlock parameters inside Studio.
