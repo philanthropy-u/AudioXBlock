@@ -42,9 +42,11 @@
                 </div>
             </div>
         </div>
-        <audio id="audio">
+        <audio id="audio" >
             <source id="audio_src" src="{{src}}" type="audio/ogg">
+            <source src="{{downloadable_src}}" type="audio/mpeg">
         </audio>
+
         <br>
          {% if is_transcript_url_valid or downloadable_src %}
             <h4 id="downloads-heading" class="">Downloads:</h4>
@@ -65,3 +67,6 @@
         </div>
     {% endif %}
 </div>
+
+
+
