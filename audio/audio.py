@@ -49,7 +49,7 @@ class AudioXBlock(XBlock):
         """
         fragment = Fragment()
         fragment.add_content(loader.render_template("static/html/audio.html", context))
-        fragment.add_css(self.resource_string("static/css/audio.scss"))
+        fragment.add_css(self.resource_string("static/css/audio.css"))
         js = self.resource_string("static/js/src/audio.js")
         fragment.add_javascript(js)
 
@@ -105,6 +105,7 @@ class AudioXBlock(XBlock):
             is_transcript_url_valid = False
 
         frag = self.get_fragment(context={
+            'loader_icon': self.runtime.local_resource_url(self, 'public/images/ajax-loader.gif'),
             'src': self.src,
             'transcript': content,
             'transcript_src': self.transcript_src,
@@ -132,7 +133,7 @@ class AudioXBlock(XBlock):
         """
         html = self.resource_string("static/html/audio_edit.html")
         frag = Fragment(html.format(src=self.src, transcript_src=self.transcript_src, downloadable_src=self.downloadable_src))
-        frag.add_css(self.resource_string("static/css/audio_edit.scss"))
+        frag.add_css(self.resource_string("static/css/audio_edit.css"))
         js = self.resource_string("static/js/src/audio_edit.js")
         frag.add_javascript(js)
         frag.initialize_js('AudioEditBlock')

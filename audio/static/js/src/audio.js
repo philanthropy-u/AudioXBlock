@@ -17,6 +17,7 @@ function AudioXBlock(runtime, element) {
 
     // Getting DOM references with JQuery
     var playBtn = $(element).find('#play-btn');
+    var loaderIcon = $(element).find('.audio-img');
     var volume = $(element).find('#volume');
     var playbackRateSet = $(element).find('#speed');
     var playbackRateBtn = $(element).find('#playback-rate-controller');
@@ -75,6 +76,7 @@ function AudioXBlock(runtime, element) {
 
     // handler for play button click event
     playBtn.click(function () {
+        loaderIcon.addClass('has-loader');
         audio[0].play();
         $(this).hide();
         pauseBtn.show();
@@ -82,6 +84,7 @@ function AudioXBlock(runtime, element) {
 
     // handler for pause button click event
     pauseBtn.click(function () {
+        loaderIcon.removeClass('has-loader');
         audio[0].pause();
         $(this).hide();
         playBtn.show();
@@ -138,6 +141,7 @@ function AudioXBlock(runtime, element) {
 
     // this event is fired when the time indicated by the currentTime attribute has been updated.
     audio.bind('timeupdate', function() {
+        loaderIcon.removeClass('has-loader');
         var sec = audio[0].currentTime;
         var h = Math.floor(sec / 3600);
         sec = sec % 3600;
