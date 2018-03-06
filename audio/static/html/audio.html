@@ -3,7 +3,7 @@
             {% if not src %}<div class="hd hd-4 video-error">* Audio playback source in invalid.</div>{% endif %}
             {% if not is_transcript_url_valid %}<div class="hd hd-4 video-error">* Transcript source is invalid.</div>{% endif %}
         <div class="audio-img">
-
+            <img class="loader" src="{{ loader_icon }}">
         </div>
         <div class="progress-bar">
             <input type="range" step="any" id="seekbar" class="slider seekbar-style">
