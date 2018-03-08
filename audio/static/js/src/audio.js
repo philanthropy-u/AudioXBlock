@@ -140,6 +140,9 @@ function AudioXBlock(runtime, element) {
     // this event is fired when the time indicated by the currentTime attribute has been updated.
     audio.bind('timeupdate', function() {
         var sec = audio[0].currentTime;
+        if (sec > 0) {
+            loaderIcon.removeClass('has-loader');
+        }
         var h = Math.floor(sec / 3600);
         sec = sec % 3600;
         var min = Math.floor(sec / 60);
@@ -151,8 +154,6 @@ function AudioXBlock(runtime, element) {
         seekbar[0].min = audio[0].startTime;
         seekbar[0].max = audio[0].duration;
         seekbar[0].value = audio[0].currentTime;
-
-        loaderIcon.removeClass('has-loader')
     });
 
     audio.bind("playing", function () {
