@@ -129,22 +129,21 @@
 }
 
 .progress-bar {
-    height: 6px;
+    height: 15px;
     position: relative;
     overflow: hidden;
-    border-top: 1px solid #292d30;
 }
 
 #play-bar {
     position: absolute;
     left:0;
     top:0;
-    height: 5px;
+    height: 15px;
     z-index: 9;
     vertical-align: top;
 }
 .canvas-bar {
-    height: 5px;
+    height: 15px;
     width: 100%;
     line-height: 0;
     font-size: 0;
@@ -259,27 +258,6 @@
     .volume-holder {
         display: none;
     }
-    .progress-bar,
-    .seekbar-style,
-    .canvas-bar,
-    #play-bar {
-        height: 15px !important;
-    }
-
-    .progress-bar {
-        border-top: none;
-    }
-
-    input[type=range].slider::-webkit-slider-thumb {
-        -webkit-appearance: none;
-        appearance: none;
-        width: 13px !important;
-        height: 13px !important;
-        border-radius: 50%;
-        background: #fff !important;
-        cursor: pointer;
-        margin-top: -4px !important;
-    }
 }
 
 .volume-holder .icon-volume{
@@ -327,13 +305,19 @@ input[type=range].slider::-webkit-slider-runnable-track {
   background:#CD578D;
 
 }
+.volume-control input[type=range].slider::-webkit-slider-thumb {
+    border: 1px solid #4e595d;
+}
+
 input[type=range].slider::-webkit-slider-thumb {
-  height: 5px;
-  width: 10px;
-  background: #ddd;
-  cursor: pointer;
-  -webkit-appearance: none;
-  margin-top: 0;
+    -webkit-appearance: none;
+    appearance: none;
+    width: 13px !important;
+    height: 13px !important;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    margin-top: -4px !important;
 }
 input[type=range].slider:focus::-webkit-slider-runnable-track {
   background: #CD578D;
@@ -366,7 +350,7 @@ input[type=range].slider::-ms-fill-upper {
 }
 input[type=range].slider::-ms-thumb {
   width: 5px;
-    background: #CD578D;
+  background: #CD578D;
   cursor: pointer;
   height: 5px;
 }
@@ -379,9 +363,8 @@ input[type=range].slider:focus::-ms-fill-upper {
 .seekbar-style {
     z-index: 99;
     position: absolute !important;
-
     top:0;
-    height: 5px;
+    height: 15px;
     background: none;
     border:none;
 }

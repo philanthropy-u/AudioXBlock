@@ -76,7 +76,6 @@ function AudioXBlock(runtime, element) {
 
     // handler for play button click event
     playBtn.click(function () {
-        loaderIcon.addClass('has-loader');
         audio[0].play();
         $(this).hide();
         pauseBtn.show();
@@ -141,11 +140,8 @@ function AudioXBlock(runtime, element) {
 
     // this event is fired when the time indicated by the currentTime attribute has been updated.
     audio.bind('timeupdate', function() {
-        loaderIcon.removeClass('has-loader');
         var sec = audio[0].currentTime;
-        if (sec > 0) {
-            loaderIcon.removeClass('has-loader');
-        }
+
         var h = Math.floor(sec / 3600);
         sec = sec % 3600;
         var min = Math.floor(sec / 60);
@@ -153,21 +149,18 @@ function AudioXBlock(runtime, element) {
         if (sec.toString().length < 2) {sec = "0" + sec;}
         if (min.toString().length < 2) {min = "0" + min;}
 
-        timer.html(h + ":" + min + ":" + sec);
+        var oldTimerText = timer.text().trim();
+        var updatedTimerText = h + ":" + min + ":" + sec;
+
+        timer.html(updatedTimerText);
         seekbar[0].min = audio[0].startTime;
         seekbar[0].max = audio[0].duration;
         seekbar[0].value = audio[0].currentTime;
 
-        loaderIcon.removeClass('has-loader')
-    });
+        if (updatedTimerText != oldTimerText && audio[0].currentTime > 1) {
+            loaderIcon.removeClass('has-loader');
+        }
 
-    audio.bind("playing", function () {
-      loaderIcon.addClass('has-loader')
-    });
-
-    audio.bind("playing", function () {
-      console.log("Playback started");
-      loaderIcon.removeClass('has-loader');
     });
 
     audio.bind("playing", function () {
