@@ -76,6 +76,7 @@ function AudioXBlock(runtime, element) {
 
     // handler for play button click event
     playBtn.click(function () {
+        loaderIcon.addClass('has-loader');
         audio[0].play();
         $(this).hide();
         pauseBtn.show();
@@ -83,6 +84,7 @@ function AudioXBlock(runtime, element) {
 
     // handler for pause button click event
     pauseBtn.click(function () {
+        loaderIcon.removeClass('has-loader');
         audio[0].pause();
         $(this).hide();
         playBtn.show();
@@ -139,6 +141,7 @@ function AudioXBlock(runtime, element) {
 
     // this event is fired when the time indicated by the currentTime attribute has been updated.
     audio.bind('timeupdate', function() {
+        loaderIcon.removeClass('has-loader');
         var sec = audio[0].currentTime;
         if (sec > 0) {
             loaderIcon.removeClass('has-loader');
@@ -154,6 +157,17 @@ function AudioXBlock(runtime, element) {
         seekbar[0].min = audio[0].startTime;
         seekbar[0].max = audio[0].duration;
         seekbar[0].value = audio[0].currentTime;
+
+        loaderIcon.removeClass('has-loader')
+    });
+
+    audio.bind("playing", function () {
+      loaderIcon.addClass('has-loader')
+    });
+
+    audio.bind("playing", function () {
+      console.log("Playback started");
+      loaderIcon.removeClass('has-loader');
     });
 
     audio.bind("playing", function () {
