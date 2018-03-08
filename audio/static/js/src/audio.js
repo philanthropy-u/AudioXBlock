@@ -143,6 +143,9 @@ function AudioXBlock(runtime, element) {
     audio.bind('timeupdate', function() {
         loaderIcon.removeClass('has-loader');
         var sec = audio[0].currentTime;
+        if (sec > 0) {
+            loaderIcon.removeClass('has-loader');
+        }
         var h = Math.floor(sec / 3600);
         sec = sec % 3600;
         var min = Math.floor(sec / 60);
@@ -165,6 +168,10 @@ function AudioXBlock(runtime, element) {
     audio.bind("playing", function () {
       console.log("Playback started");
       loaderIcon.removeClass('has-loader');
+    });
+
+    audio.bind("playing", function () {
+      loaderIcon.addClass('has-loader')
     });
 
     // this event is fired when playback has stopped.
