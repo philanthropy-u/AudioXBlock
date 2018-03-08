@@ -154,6 +154,12 @@ function AudioXBlock(runtime, element) {
         seekbar[0].min = audio[0].startTime;
         seekbar[0].max = audio[0].duration;
         seekbar[0].value = audio[0].currentTime;
+
+        loaderIcon.removeClass('has-loader')
+    });
+
+    audio.bind("playing", function () {
+      loaderIcon.addClass('has-loader')
     });
 
     audio.bind("playing", function () {
