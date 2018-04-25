@@ -1,5 +1,10 @@
 function AudioXBlock(runtime, element) {
 
+    var courseId = $(element).data('courseId');
+    var usageId = $(element).data('usageId');
+    var moduleStorageKey = courseId + usageId;
+    var saveStateUrl = "/courses/" + courseId + "/xblock/" + usageId + "/handler/xmodule_handler/save_user_state";
+
     // reference of main audio file
     var audio = $(element).find('#audio');
     // reference of buffering canvas, that indicates audio file buffered progress
@@ -32,7 +37,6 @@ function AudioXBlock(runtime, element) {
     playbackRateSet.hide();
     volume.hide();
     seekBar[0].value = 0;
-
 
     // loading the meta data for audio file, e.g. audio length, and playing automatically
     audio.bind('loadedmetadata', function() {
@@ -76,6 +80,12 @@ function AudioXBlock(runtime, element) {
 
     // handler for play button click event
     playBtn.click(function () {
+        audio[0].currentTime = getStateFromStorage(moduleStorageKey);
+
+        if (audio[0].currentTime < 1) {
+            saveState({"saved_audio_position": "00:00:00", "restart_count": true}, false);
+        }
+
         audio[0].play();
         $(this).hide();
         pauseBtn.show();
@@ -87,7 +97,35 @@ function AudioXBlock(runtime, element) {
         audio[0].pause();
         $(this).hide();
         playBtn.show();
+
+        saveState({"saved_audio_position": timer.text().trim()}, false);
+
     });
+
+    var saveStateInStorage = function (_key, currentTime) {
+        localStorage.setItem(_key, currentTime);
+    };
+
+    var getStateFromStorage = function (_key) {
+        return localStorage.getItem(_key);
+    };
+
+    var saveState = function(data, isCompleted) {
+        $.ajax({
+            url: saveStateUrl,
+            type: 'POST',
+            async: true,
+            dataType: 'json',
+            data: data,
+            success: function (response) {
+                if(isCompleted) {
+                    saveStateInStorage(moduleStorageKey, 0);
+                } else {
+                    saveStateInStorage(moduleStorageKey, audio[0].currentTime);
+                }
+            }
+        });
+    };
 
     // volume handler
     volume.bind('mousemove', function () {
@@ -163,12 +201,14 @@ function AudioXBlock(runtime, element) {
 
     });
 
+
     audio.bind("playing", function () {
       loaderIcon.addClass('has-loader')
     });
 
     // this event is fired when playback has stopped.
     audio.bind('ended', function() {
+        saveState({"saved_audio_position": timer.text().trim(), "is_audio_completed": true}, true);
         playBtn.show();
         pauseBtn.hide();
     });

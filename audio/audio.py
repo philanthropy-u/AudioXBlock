@@ -1,16 +1,22 @@
 """TO-DO: This XBlock will play an MP3 file as an HTML5 audio element. """
-
+import json
+import datetime
 import pkg_resources
 import requests
 
-from xblock.core import XBlock
-from xblock.fields import Scope, Integer, String
-from xblock.fragment import Fragment
+from xmodule.exceptions import NotFoundError
+from xmodule.fields import RelativeTime
 
+from xblock.core import XBlock
+from xblock.fields import Scope, Integer, String, Integer, Boolean
+from xblock.fragment import Fragment
+from webob.multidict import MultiDict
+from webob import Response
 from mimetypes import MimeTypes
 import urllib
 import re
 from xblockutils.resources import ResourceLoader
+_ = lambda text: text
 loader = ResourceLoader(__name__)
 
 regex = re.compile(
@@ -36,6 +42,24 @@ class AudioXBlock(XBlock):
     transcript_src = String(scope=Scope.settings, help="plain text", default="")
     # holds the downloadable link of media file
     downloadable_src = String(scope=Scope.settings, help="URL for .mp3 file to download", default="")
+
+    saved_audio_position = RelativeTime(
+        help=_("Current position in the audio."),
+        scope=Scope.user_state,
+        default=datetime.timedelta(seconds=0)
+    )
+
+    is_audio_completed = Boolean(
+        help=_("Have user once listened the audio completely?"),
+        scope=Scope.user_state,
+        default=False
+    )
+
+    restart_count = Integer(
+        help=_("Count the audio was restarted from the beginning."),
+        scope=Scope.user_state,
+        default=0
+    )
 
     def get_fragment(self, context):
         """
@@ -149,7 +173,76 @@ class AudioXBlock(XBlock):
         self.transcript_src = data.get('transcript_src')
         self.downloadable_src = data.get('downloadable_src')
 
-        return {'result': 'success'}
+        return {'result': 'success'}\
+
+
+    @XBlock.handler
+    def xmodule_handler(self, request, suffix=None):
+        """
+        XBlock handler that wraps `handle_ajax`
+        """
+
+        class FileObjForWebobFiles(object):
+            """
+            Turn Webob cgi.FieldStorage uploaded files into pure file objects.
+
+            Webob represents uploaded files as cgi.FieldStorage objects, which
+            have a .file attribute.  We wrap the FieldStorage object, delegating
+            attribute access to the .file attribute.  But the files have no
+            name, so we carry the FieldStorage .filename attribute as the .name.
+
+            """
+
+            def __init__(self, webob_file):
+                self.file = webob_file.file
+                self.name = webob_file.filename
+
+            def __getattr__(self, name):
+                return getattr(self.file, name)
+
+        # WebOb requests have multiple entries for uploaded files.  handle_ajax
+        # expects a single entry as a list.
+        request_post = MultiDict(request.POST)
+        for key in set(request.POST.iterkeys()):
+            if hasattr(request.POST[key], "file"):
+                request_post[key] = map(FileObjForWebobFiles, request.POST.getall(key))
+
+        response_data = self.handle_ajax(suffix, request_post)
+        return Response(response_data, content_type='application/json')
+
+    def handle_ajax(self, dispatch, data):
+        """
+        Update values of xfields, that were changed by student.
+        """
+        accepted_keys = [
+            "is_audio_completed", "saved_audio_position", "restart_count"
+        ]
+
+        conversions = {
+            "saved_audio_position": RelativeTime.isotime_to_timedelta,
+        }
+
+        incremented = ["restart_count"]
+
+        if dispatch == 'save_user_state':
+            for key in data:
+                if key in accepted_keys:
+                    if key in conversions:
+                        value = conversions[key](data[key])
+                    elif key in incremented:
+                        value = getattr(self, key) + 1
+                    else:
+                        value = data[key]
+
+                    setattr(self, key, value)
+
+            return json.dumps({'success': True})
+
+        raise NotFoundError('Unexpected dispatch type')
+    #
+    # def save(self):
+    #     pass
+
 
     # workbench while developing your XBlock.
     @staticmethod
