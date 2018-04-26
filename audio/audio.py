@@ -173,7 +173,7 @@ class AudioXBlock(XBlock):
         self.transcript_src = data.get('transcript_src')
         self.downloadable_src = data.get('downloadable_src')
 
-        return {'result': 'success'}\
+        return {'result': 'success'}
 
 
     @XBlock.handler
@@ -182,31 +182,7 @@ class AudioXBlock(XBlock):
         XBlock handler that wraps `handle_ajax`
         """
 
-        class FileObjForWebobFiles(object):
-            """
-            Turn Webob cgi.FieldStorage uploaded files into pure file objects.
-
-            Webob represents uploaded files as cgi.FieldStorage objects, which
-            have a .file attribute.  We wrap the FieldStorage object, delegating
-            attribute access to the .file attribute.  But the files have no
-            name, so we carry the FieldStorage .filename attribute as the .name.
-
-            """
-
-            def __init__(self, webob_file):
-                self.file = webob_file.file
-                self.name = webob_file.filename
-
-            def __getattr__(self, name):
-                return getattr(self.file, name)
-
-        # WebOb requests have multiple entries for uploaded files.  handle_ajax
-        # expects a single entry as a list.
         request_post = MultiDict(request.POST)
-        for key in set(request.POST.iterkeys()):
-            if hasattr(request.POST[key], "file"):
-                request_post[key] = map(FileObjForWebobFiles, request.POST.getall(key))
-
         response_data = self.handle_ajax(suffix, request_post)
         return Response(response_data, content_type='application/json')
 
@@ -239,10 +215,6 @@ class AudioXBlock(XBlock):
             return json.dumps({'success': True})
 
         raise NotFoundError('Unexpected dispatch type')
-    #
-    # def save(self):
-    #     pass
-
 
     # workbench while developing your XBlock.
     @staticmethod
