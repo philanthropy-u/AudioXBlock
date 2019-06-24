@@ -176,6 +176,8 @@ function AudioXBlock(runtime, element) {
         seekbar[0].value = 0;
     });
 
+    var isTrackingEventSent = false;
+
     // this event is fired when the time indicated by the currentTime attribute has been updated.
     audio.bind('timeupdate', function() {
         var sec = audio[0].currentTime;
@@ -191,6 +193,21 @@ function AudioXBlock(runtime, element) {
         var updatedTimerText = h + ":" + min + ":" + sec;
 
         timer.html(updatedTimerText);
+
+        if (updatedTimerText === "0:00:10") { // Track GTM only at a particular time
+            if (!isTrackingEventSent) { // preventing multiple GTM events
+                // every time this function is called, audio[0].currentTime return floating point
+                // value i.e. 5.785, 10.234, 10.534, 10.855, 11.399; When floating points are
+                // converted to seconds i.e. 0:00:05, 0:00:10, 0:00:10, 0:00:10, 0:00:11, same
+                // value may repeat multiple times
+                trackEvent(GTM_EVENT_CATEGORY.productEngagement, GTM_EVENT_ACTION.productEngagementAudio,
+                    GTM_EVENT_LABEL.productEngagementAudio, GTM_EVENT_VALUE.productEngagementAudio);
+                isTrackingEventSent = true;
+            }
+        } else {
+            isTrackingEventSent = false;
+        }
+
         seekbar[0].min = audio[0].startTime;
         seekbar[0].max = audio[0].duration;
         seekbar[0].value = audio[0].currentTime;
