@@ -192,7 +192,7 @@ function AudioXBlock(runtime, element) {
 
         var timeText = timer.html();
         // Track GTM only at a particular time and prevent multiple GTM events
-        if (updatedTimerText === '0:00:10' && timeText.lastIndexOf(updatedTimerText, 0) < 0) {
+        if (updatedTimerText === '0:00:30' && timeText.lastIndexOf(updatedTimerText, 0) < 0) {
             // every time this function is called, audio[0].currentTime return floating point
             // value i.e. 5.785, 10.234, 10.534, 10.855, 11.399; When floating points are
             // converted to seconds i.e. 0:00:05, 0:00:10, 0:00:10, 0:00:10, 0:00:11, same
